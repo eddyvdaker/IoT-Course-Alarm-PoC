@@ -1,0 +1,6 @@
+virtualenv
+db.sqlite3
+_pycache_
+*.pyc
+*.swp
+.idea
