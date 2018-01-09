@@ -1,94 +1,15 @@
 from flask import Flask, jsonify, render_template, redirect
-import sqlite3
-import os
-import time
+from helper_functions import *
 
 app = Flask(__name__)
-db = 'database.sqlite3'
 
 
-"""
-HELPER FUNCTIONS
-"""
-
-
-def create_db():
-    try:
-        os.remove(db)
-    except FileNotFoundError:
-        pass
-
-    con = sqlite3.connect(db)
-    cur = con.cursor()
-
-    cur.execute("""
-    CREATE TABLE entries (
-      id integer PRIMARY KEY AUTOINCREMENT,
-      t text NOT NULL,
-      device_id text NOT NULL,
-      device_type text NOT NULL) 
-    """)
-
-    con.commit()
-    con.close()
-
-
-def write_sql(data):
-    con = sqlite3.connect(db)
-    cur = con.cursor()
-    command = f'INSERT INTO entries (t, device_id, device_type) ' \
-              f'VALUES (\'{data["t"]}\', \'{data["device_id"]}\', ' \
-              f'\'{data["device_type"]}\')'
-    cur.execute(command)
-    con.commit()
-    con.close()
-
-
-def read_sql(where):
-    con = sqlite3.connect(db)
-    cur = con.cursor()
-    cur.execute(f'SELECT * FROM entries WHERE {where}')
-    data = cur.fetchall()
-    con.close()
-    return data
-
-
-def truple_to_list(data):
-    new_data = []
-    for row in data:
-        new_data.append(list(row))
-    return new_data
-
-
-def read_status_file(file):
-    file = os.path.join('./device_status/' + str(file))
-    with open(file, 'r') as f:
-        return f.readline()
-
-
-def write_status_file(file, to_write):
-    file = os.path.join('./device_status/' + str(file))
-    with open(file, 'w') as f:
-        f.write(str(to_write))
-    return to_write
-
-
-def bool_to_on_off(to_convert):
-    if to_convert:
-        return 'On'
-    else:
-        return 'Off'
-
-
+# Helper function to load all vars into a dictionary
+# created to keep homepage() clean.
 def generate_vars():
     page_vars = {'alarm_status': bool_to_on_off(ALARM_STATUS),
                  'lights_status': bool_to_on_off(LIGHTS_STATUS)}
     return page_vars
-
-
-"""
-FLASK FUNCTIONS
-"""
 
 
 @app.route('/', methods=['GET'])
@@ -133,19 +54,9 @@ def set_alarm_status():
 
 if __name__ == '__main__':
     create_db()
-
-    # Create some test data
-    write_sql({'t': time.time(), 'device_id': 'd1', 'device_type': 'door'})
-    write_sql({'t': time.time(), 'device_id': 'm3', 'device_type': 'movement'})
-    write_sql({'t': time.time(), 'device_id': 'c5', 'device_type': 'camera'})
-    write_sql({'t': time.time(), 'device_id': 'd1', 'device_type': 'door'})
-    write_sql({'t': time.time(), 'device_id': 'm3', 'device_type': 'movement'})
-    write_sql({'t': time.time(), 'device_id': 'c4', 'device_type': 'camera'})
-    write_sql({'t': time.time(), 'device_id': 'd7', 'device_type': 'door'})
-    write_sql({'t': time.time(), 'device_id': 'm2', 'device_type': 'movement'})
-    write_sql({'t': time.time(), 'device_id': 'c1', 'device_type': 'camera'})
+    create_test_data()
 
     ALARM_STATUS = read_status_file('alarm_status.txt')
     LIGHTS_STATUS = read_status_file('lights_status.txt')
 
-    app.run()
+    app.run(host='0.0.0.0')
