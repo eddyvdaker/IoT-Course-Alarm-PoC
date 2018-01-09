@@ -9,6 +9,9 @@ GPIO.setmode(GPIO.BCM)
 # Lights button
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+# Lights led
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 # Door buttons
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -36,6 +39,16 @@ def check_lights():
         if GPIO.input(17) == False:
             urllib.request.urlopen('http://10.0.0.58:5000/lights_toggle')
             time.sleep(0.2)
+
+
+def turn_on_off_lights():
+    while True:
+        if read_status_file('light_status.txt'):
+            GPIO.output(18, True)
+            time.sleep(0.5)
+        else:
+            GPIO.output(18, False)
+            time.sleep(0.5)
 
 
 def start_button_checking():
