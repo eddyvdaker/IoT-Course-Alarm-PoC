@@ -30,7 +30,7 @@ def check_doors():
 def check_lights():
     while True:
         if GPIO.input(17) == False:
-            urllib.request.urlopen('0.0.0.0:5000/lights_toggle')
+            urllib.request.urlopen('127.0.0.1:5000/lights_toggle')
             time.sleep(0.2)
 
 
