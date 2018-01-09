@@ -115,22 +115,12 @@ def get_camera_data():
     return jsonify({'data': data})
 
 
-@app.route('/lights', methods=['GET'])
-def get_lights_status():
-    return jsonify({'lights status': LIGHTS_STATUS})
-
-
 @app.route('/lights_toggle', methods=['GET'])
 def set_lights_status():
     global LIGHTS_STATUS
     LIGHTS_STATUS = not LIGHTS_STATUS
     write_status_file('lights_status.txt', LIGHTS_STATUS)
     return redirect('/')
-
-
-@app.route('/alarm_status', methods=['GET'])
-def get_alarm_status():
-    return jsonify({'alarm status': ALARM_STATUS})
 
 
 @app.route('/alarm_toggle', methods=['GET'])
