@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, redirect
 from helper_functions import *
-from sensors import *
+# from sensors import *
 
 app = Flask(__name__)
 
@@ -57,11 +57,8 @@ if __name__ == '__main__':
     create_db()
     create_test_data()
 
-    try:
-        start_button_checking()
-    except RuntimeError:
-        # Skip if not ran on Pi
-        pass
+    # start_button_checking()
+
 
     ALARM_STATUS = read_status_file('alarm_status.txt')
     LIGHTS_STATUS = read_status_file('lights_status.txt')
