@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, redirect
 import sqlite3
 import os
 import time
@@ -73,6 +73,19 @@ def write_status_file(file, to_write):
     return to_write
 
 
+def bool_to_on_off(to_convert):
+    if to_convert:
+        return 'On'
+    else:
+        return 'Off'
+
+
+def generate_vars():
+    page_vars = {'alarm_status': bool_to_on_off(ALARM_STATUS),
+                 'lights_status': bool_to_on_off(LIGHTS_STATUS)}
+    return page_vars
+
+
 """
 FLASK FUNCTIONS
 """
@@ -80,7 +93,8 @@ FLASK FUNCTIONS
 
 @app.route('/', methods=['GET'])
 def homepage():
-    pass
+    page_vars = generate_vars()
+    return render_template('homepage.html', page_vars=page_vars)
 
 
 @app.route('/door', methods=['GET'])
@@ -103,15 +117,15 @@ def get_camera_data():
 
 @app.route('/lights', methods=['GET'])
 def get_lights_status():
-    return jsonify({'lights status': LIGHT_STATUS})
+    return jsonify({'lights status': LIGHTS_STATUS})
 
 
 @app.route('/lights_toggle', methods=['GET'])
 def set_lights_status():
-    global LIGHT_STATUS
-    LIGHT_STATUS = not LIGHT_STATUS
-    write_status_file('lights_status.txt', LIGHT_STATUS)
-    return jsonify({'lights status': LIGHT_STATUS})
+    global LIGHTS_STATUS
+    LIGHTS_STATUS = not LIGHTS_STATUS
+    write_status_file('lights_status.txt', LIGHTS_STATUS)
+    return redirect('/')
 
 
 @app.route('/alarm_status', methods=['GET'])
@@ -124,7 +138,7 @@ def set_alarm_status():
     global ALARM_STATUS
     ALARM_STATUS = not ALARM_STATUS
     write_status_file('alarm_status.txt', ALARM_STATUS)
-    return jsonify({'alarm status': ALARM_STATUS})
+    return redirect('/')
 
 
 if __name__ == '__main__':
@@ -142,6 +156,6 @@ if __name__ == '__main__':
     write_sql({'t': time.time(), 'device_id': 'c1', 'device_type': 'camera'})
 
     ALARM_STATUS = read_status_file('alarm_status.txt')
-    LIGHT_STATUS = read_status_file('lights_status.txt')
+    LIGHTS_STATUS = read_status_file('lights_status.txt')
 
     app.run()

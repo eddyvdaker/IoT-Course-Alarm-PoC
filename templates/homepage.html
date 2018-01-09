@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="15">
+    <title>IoT Alarm</title>
+</head>
+<body>
+    <h1>Alarm System</h1>
+    <br>
+    <h3>Status</h3>
+    <table>
+        <tr>
+            <td><b>Alarm</b></td>
+            <td> </td>
+            <td>: {{ page_vars['alarm_status'] }}</td>
+            <td> </td>
+            <td>
+                <form action="/alarm_toggle" method="get">
+                    <button name="foo" value="/toggle_alarm">On/Off</button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Lights</b></td>
+            <td> </td>
+            <td>: {{ page_vars['lights_status'] }}</td>
+            <td> </td>
+            <td>
+                <form action="/lights_toggle" method="get">
+                    <button name="foo" value="/lights_alarm">On/Off</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
