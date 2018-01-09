@@ -16,14 +16,18 @@ GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 def check_doors():
+    previous_state = [True, True, True]
     while True:
         input_states = [GPIO.input(24), GPIO.input(23), GPIO.input(22)]
         for i, state in enumerate(input_states):
             if state == False:
+                previous_state[i] = False
                 write_sql({'t': time.time(),
                            'device_id': f'd{i}',
                            'device_type': 'door'})
                 time.sleep(0.2)
+            else:
+                previous_state[i] = True
 
 
 def check_lights():
