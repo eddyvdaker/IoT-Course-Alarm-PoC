@@ -54,3 +54,4 @@ def turn_on_off_lights():
 def start_button_checking():
     threading.Thread(target=check_doors, args=[]).start()
     threading.Thread(target=check_lights, args=[]).start()
+    threading.Thread(target=turn_on_off_lights, args=[]).start()
