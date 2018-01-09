@@ -20,9 +20,9 @@ def check_doors():
         input_states = [GPIO.input(24), GPIO.input(23), GPIO.input(22)]
         for i, state in enumerate(input_states):
             if state == False:
-                write_sql({{'t': time.time(),
-                            'device_id': f'd{i}',
-                            'device_type': 'door'}})
+                write_sql({'t': time.time(),
+                           'device_id': f'd{i}',
+                           'device_type': 'door'})
                 time.sleep(0.2)
 
 
