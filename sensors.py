@@ -43,7 +43,7 @@ def check_lights():
 
 def turn_on_off_lights():
     while True:
-        if read_status_file('lights_status.txt'):
+        if read_status_file('lights_status.txt') == 'True':
             GPIO.output(18, True)
             time.sleep(0.5)
         else:
