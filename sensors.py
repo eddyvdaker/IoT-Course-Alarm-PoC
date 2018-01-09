@@ -2,6 +2,7 @@ from helper_functions import *
 import time
 import RPi.GPIO as GPIO
 import urllib.request
+import threading
 
 GPIO.setmode(GPIO.BCM)
 
@@ -31,3 +32,8 @@ def check_lights():
         if GPIO.input(17) == False:
             urllib.request.urlopen('0.0.0.0:5000/lights_toggle')
             time.sleep(0.2)
+
+
+def start_button_checking():
+    threading.Thread(target=check_doors, args=[]).start()
+    threading.Thread(target=check_lights, args=[]).start()
