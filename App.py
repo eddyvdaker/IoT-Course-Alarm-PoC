@@ -5,17 +5,9 @@ from sensors import *
 app = Flask(__name__)
 
 
-# Helper function to load all vars into a dictionary
-# created to keep homepage() clean.
-def generate_vars():
-    page_vars = {'alarm_status': bool_to_on_off(ALARM_STATUS),
-                 'lights_status': bool_to_on_off(LIGHTS_STATUS)}
-    return page_vars
-
-
 @app.route('/', methods=['GET'])
 def homepage():
-    page_vars = generate_vars()
+    page_vars = generate_vars(ALARM_STATUS, LIGHTS_STATUS)
     return render_template('homepage.html', page_vars=page_vars)
 
 
@@ -55,7 +47,6 @@ def set_alarm_status():
 
 if __name__ == '__main__':
     create_db()
-    # create_test_data()
 
     start_button_checking()
 

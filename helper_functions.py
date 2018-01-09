@@ -5,6 +5,7 @@ import time
 db = 'database.sqlite3'
 
 
+# Deletes old database and creates a new one with an entries table
 def create_db():
     try:
         os.remove(db)
@@ -26,18 +27,7 @@ def create_db():
     con.close()
 
 
-def create_test_data():
-    write_sql({'t': time.time(), 'device_id': 'd1', 'device_type': 'door'})
-    write_sql({'t': time.time(), 'device_id': 'm3', 'device_type': 'movement'})
-    write_sql({'t': time.time(), 'device_id': 'c5', 'device_type': 'camera'})
-    write_sql({'t': time.time(), 'device_id': 'd1', 'device_type': 'door'})
-    write_sql({'t': time.time(), 'device_id': 'm3', 'device_type': 'movement'})
-    write_sql({'t': time.time(), 'device_id': 'c4', 'device_type': 'camera'})
-    write_sql({'t': time.time(), 'device_id': 'd7', 'device_type': 'door'})
-    write_sql({'t': time.time(), 'device_id': 'm2', 'device_type': 'movement'})
-    write_sql({'t': time.time(), 'device_id': 'c1', 'device_type': 'camera'})
-
-
+# Writes a new entry to the entries table in the database
 def write_sql(data):
     con = sqlite3.connect(db)
     cur = con.cursor()
@@ -49,6 +39,7 @@ def write_sql(data):
     con.close()
 
 
+# Grabs rows from entries table with the specified condition
 def read_sql(where):
     con = sqlite3.connect(db)
     cur = con.cursor()
@@ -58,6 +49,7 @@ def read_sql(where):
     return data
 
 
+# Converts a truple to a list
 def truple_to_list(data):
     new_data = []
     for row in data:
@@ -65,12 +57,14 @@ def truple_to_list(data):
     return new_data
 
 
+# Reads value from status file
 def read_status_file(file):
     file = os.path.join('./device_status/' + str(file))
     with open(file, 'r') as f:
         return f.readline()
 
 
+# Updates status from main app to specified status file
 def write_status_file(file, to_write):
     file = os.path.join('./device_status/' + str(file))
     with open(file, 'w') as f:
@@ -78,8 +72,15 @@ def write_status_file(file, to_write):
     return to_write
 
 
+# Converts a boolean to an 'on' or 'off' string
 def bool_to_on_off(to_convert):
     if to_convert:
         return 'On'
     else:
         return 'Off'
+
+
+def generate_vars(alarm_status, lights_status):
+    page_vars = {'alarm_status': bool_to_on_off(alarm_status),
+                 'lights_status': bool_to_on_off(lights_status)}
+    return page_vars

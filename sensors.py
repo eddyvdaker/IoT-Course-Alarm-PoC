@@ -18,6 +18,7 @@ GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
+# Check if and which door button is pressed (door opened)
 def check_doors():
     previous_state = [True, True, True]
     while True:
@@ -34,6 +35,7 @@ def check_doors():
                 previous_state[i] = True
 
 
+# Check if the lights button is being pressed
 def check_lights():
     while True:
         if GPIO.input(17) == False:
@@ -41,6 +43,7 @@ def check_lights():
             time.sleep(0.2)
 
 
+# If lights status is True turn on lights
 def turn_on_off_lights():
     while True:
         if read_status_file('lights_status.txt') == 'True':
