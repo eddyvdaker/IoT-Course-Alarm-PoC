@@ -84,5 +84,6 @@ def bool_to_on_off(to_convert):
 # to fill the homepage template
 def generate_vars(alarm_status, lights_status):
     page_vars = {'alarm_status': bool_to_on_off(alarm_status),
-                 'lights_status': bool_to_on_off(lights_status)}
+                 'lights_status': bool_to_on_off(lights_status),
+                 'door_logs': [['d0', time.time()], ['d0', time.time()], ['d1', time.time()]]}
     return page_vars

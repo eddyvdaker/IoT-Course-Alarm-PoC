@@ -33,5 +33,19 @@
             </td>
         </tr>
     </table>
+
+    <h3>Door openings</h3>
+    <table>
+        <tr>
+            <th>Door</th>
+            <th>Time</th>
+        </tr>
+        {% for item in page_vars['door_log'] %}
+        <tr>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
