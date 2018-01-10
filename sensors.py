@@ -40,8 +40,8 @@ def check_doors():
 def check_lights():
     while True:
         if GPIO.input(17) == False:
-            urllib.request.urlopen('http://192.168.55.50:5000/lights_toggle')
-            urllib.request.urlopen('http://10.0.0.58:5000/lights_toggle')
+            ip = read_status_file('ip_addr.txt')
+            urllib.request.urlopen(f'http://{ip}:5000/lights_toggle')
             time.sleep(0.2)
 
 
