@@ -81,14 +81,20 @@ def bool_to_on_off(to_convert):
         return 'Off'
 
 
+# Reads log with specified device type and returns a list
+def get_logs(device_type):
+    log = truple_to_list(read_sql(f'device_type =\'{device_type}\''))
+    log.sort(key=lambda x: x[1], reverse=True)
+    new_log = []
+    for row in log:
+        new_log.append([row[2], row[1]])
+    return new_log
+
+
 # Gets the data from the database and the status and returns an dictionary
 # to fill the homepage template
 def generate_vars(alarm_status, lights_status):
-    doors = truple_to_list(read_sql('device_type = \'door\''))
-    doors.sort(key=lambda x: x[1], reverse=True)
-    doors_log = []
-    for row in doors:
-        doors_log.append([row[2], row[1]])
+    doors_log = get_logs('door')
     page_vars = {'alarm_status': bool_to_on_off(alarm_status),
                  'lights_status': bool_to_on_off(lights_status),
                  'door_log': doors_log}
