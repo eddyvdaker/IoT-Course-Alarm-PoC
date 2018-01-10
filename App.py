@@ -22,6 +22,8 @@ def get_movement_data():
     data = truple_to_list(read_sql('device_type = \'movement\''))
     return jsonify({'data': data})
 
+192.168.55.51 - - [10/Jan/2018 01:20:39] "GET /alarm_toggle HTTP/1.1" 302 -
+192.168.55.51 - - [10/Jan/2018 01:20:39] "GET / HTTP/1.1" 200 -
 
 @app.route('/camera', methods=['GET'])
 def get_camera_data():
