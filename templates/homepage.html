@@ -35,13 +35,13 @@
     </table>
 
     <h3>Door openings</h3>
-    <table style="border: 1px solid;">
-        <tr>
+    <table style="border: 1px solid black;">
+        <tr style="border: 1px solid black;">
             <th>Door</th>
             <th>Time</th>
         </tr>
         {% for item in page_vars['door_log'] %}
-        <tr>
+        <tr style="border: 1px solid black;">
             <td>{{ item[0] }}</td>
             <td>{{ item[1] }}</td>
         </tr>
