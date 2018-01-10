@@ -75,19 +75,21 @@ if __name__ == '__main__':
         cv2.imshow('Frame Delta', frame_delta)
 
         if movement_detected:
-            file = f'{int(time.time())}.png'
-            if time.time() - previous_send_time > screenshot_timeout:
+            current_time = time.time()
+            file = f'{current_time}.png'
+
+            if current_time - previous_send_time > screenshot_timeout:
                 cv2.imwrite(f'{path}{file}', frame)
-                previous_send_time = time.time()
+                previous_send_time = current_time
 
             if not previous_movement_detected and send_to_server:
-                url = f'http://{server_ip}/post_camera?id={camera_id}'
+                url = f'http://{server_ip}/post_camera?id={camera_id}&time={current_time}'
                 urllib.request.urlopen(url)
-                opy_cmd = f'scp {path}{file} pi@{server_ip}:/home/pi/' \
-                           f'IoT-Course-Alarm-PoC/static/{file}'
-                process = subprocess.Popen(copy_cmd.split(),
-                                           stdout=subprocess.PIPE,
-                                           stderr=subprocess.PIPE)
+
+                # Try setting up an thread that constantly copies the screenshots
+                # folder to the Pi, then deletes files. On the Pi setup a thread
+                # that takes the images out of the folder that have an timestamp
+                # in the db and display only those on the webpage.
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
