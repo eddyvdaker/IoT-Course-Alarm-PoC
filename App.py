@@ -45,7 +45,7 @@ def set_alarm_status():
     return redirect('/')
 
 
-@app.route('/post_camera', methods=['POST'])
+@app.route('/post_camera', methods=['GET'])
 def set_camera_entry():
     """
     task = {
