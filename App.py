@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, redirect
+from flask import Flask, jsonify, render_template, redirect, request
 from helper_functions import *
 from sensors import *
 
@@ -22,8 +22,6 @@ def get_movement_data():
     data = truple_to_list(read_sql('device_type = \'movement\''))
     return jsonify({'data': data})
 
-192.168.55.51 - - [10/Jan/2018 01:20:39] "GET /alarm_toggle HTTP/1.1" 302 -
-192.168.55.51 - - [10/Jan/2018 01:20:39] "GET / HTTP/1.1" 200 -
 
 @app.route('/camera', methods=['GET'])
 def get_camera_data():
@@ -45,6 +43,21 @@ def set_alarm_status():
     ALARM_STATUS = not ALARM_STATUS
     write_status_file('alarm_status.txt', ALARM_STATUS)
     return redirect('/')
+
+
+@app.route('/post_camera', methods=['POST'])
+def set_camera_entry():
+    """
+    task = {
+        't': time.time(),
+        'device_id': request.json['id'],
+        'device_type': 'camera'
+    }
+    if ALARM_STATUS == 'True':
+        write_sql(task)
+    return jsonify({'task': task}), 201
+    """
+    return request.get_json(), 201
 
 
 if __name__ == '__main__':
