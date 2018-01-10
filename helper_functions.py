@@ -80,6 +80,8 @@ def bool_to_on_off(to_convert):
         return 'Off'
 
 
+# Gets the data from the database and the status and returns an dictionary
+# to fill the homepage template
 def generate_vars(alarm_status, lights_status):
     page_vars = {'alarm_status': bool_to_on_off(alarm_status),
                  'lights_status': bool_to_on_off(lights_status)}
