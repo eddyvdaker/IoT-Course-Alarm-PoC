@@ -83,7 +83,7 @@ if __name__ == '__main__':
             if not previous_movement_detected and send_to_server:
                 url = f'http://{server_ip}/post_camera?id={camera_id}'
                 urllib.request.urlopen(url)
-                copy_cmd = f'scp {path}{file} pi@{server_ip}:/home/pi/' \
+                opy_cmd = f'scp {path}{file} pi@{server_ip}:/home/pi/' \
                            f'IoT-Course-Alarm-PoC/static/{file}'
                 process = subprocess.Popen(copy_cmd.split(),
                                            stdout=subprocess.PIPE,
