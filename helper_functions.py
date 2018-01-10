@@ -84,7 +84,7 @@ def bool_to_on_off(to_convert):
 # Gets the data from the database and the status and returns an dictionary
 # to fill the homepage template
 def generate_vars(alarm_status, lights_status):
-    door_log = urllib.request.urlopen('http://10.0.0.58:5000/door')
+    #door_log = urllib.request.urlopen('http://10.0.0.58:5000/door')
     page_vars = {'alarm_status': bool_to_on_off(alarm_status),
                  'lights_status': bool_to_on_off(lights_status),
                  'door_log': [['d0', time.time()], ['d0', time.time()], ['d1', time.time()]]}
