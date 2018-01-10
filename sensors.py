@@ -26,10 +26,11 @@ def check_doors():
         for i, state in enumerate(input_states):
             if state == False:
                 if previous_state[i] == True:
-                    write_sql({'t': time.time(),
-                               'device_id': f'd{i}',
-                               'device_type': 'door'})
-                    time.sleep(0.2)
+                    if read_status_file('alarm_status.txt') == 'True':
+                        write_sql({'t': time.time(),
+                                   'device_id': f'd{i}',
+                                   'device_type': 'door'})
+                        time.sleep(0.2)
                 previous_state[i] = False
             else:
                 previous_state[i] = True
