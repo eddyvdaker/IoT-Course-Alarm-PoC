@@ -47,16 +47,13 @@ def set_alarm_status():
 
 @app.route('/post_camera', methods=['GET'])
 def set_camera_entry():
-    """
     task = {
         't': time.time(),
-        'device_id': request.json['id'],
+        'device_id': request.args.get('id'),
         'device_type': 'camera'
     }
     if ALARM_STATUS == 'True':
         write_sql(task)
-    return jsonify({'task': task}), 201
-    """
     return request.args.get('id'), 201
 
 
