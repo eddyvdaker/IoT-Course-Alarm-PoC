@@ -36,14 +36,14 @@
 
     <h3>Door openings</h3>
     <table style="border: 1px solid black;">
-        <tr style="border: 1px solid black;">
-            <th>Door</th>
-            <th>Time</th>
+        <tr>
+            <th style="border: 1px solid black;">Door</th>
+            <th style="border: 1px solid black;">Time</th>
         </tr>
         {% for item in page_vars['door_log'] %}
-        <tr style="border: 1px solid black;">
-            <td>{{ item[0] }}</td>
-            <td>{{ item[1] }}</td>
+        <tr>
+            <td style="border: 1px solid black;">{{ item[0] }}</td>
+            <td style="border: 1px solid black;">{{ item[1] }}</td>
         </tr>
         {% endfor %}
     </table>
