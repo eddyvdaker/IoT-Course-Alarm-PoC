@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, redirect
 from helper_functions import *
-# from sensors import *
+from sensors import *
 
 app = Flask(__name__)
 
@@ -48,7 +48,7 @@ def set_alarm_status():
 if __name__ == '__main__':
     create_db()
 
-    # start_button_checking()
+    start_button_checking()
 
     ALARM_STATUS = read_status_file('alarm_status.txt')
     LIGHTS_STATUS = read_status_file('lights_status.txt')
