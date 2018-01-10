@@ -95,7 +95,9 @@ def get_logs(device_type):
 # to fill the homepage template
 def generate_vars(alarm_status, lights_status):
     doors_log = get_logs('door')
+    camera_log = get_logs('camera')
     page_vars = {'alarm_status': bool_to_on_off(alarm_status),
                  'lights_status': bool_to_on_off(lights_status),
-                 'door_log': doors_log}
+                 'door_log': doors_log,
+                 'camera_log': camera_log}
     return page_vars
