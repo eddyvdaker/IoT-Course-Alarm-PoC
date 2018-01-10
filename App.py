@@ -57,7 +57,7 @@ def set_camera_entry():
         write_sql(task)
     return jsonify({'task': task}), 201
     """
-    return request.get_json(), 201
+    return request.args.get('id'), 201
 
 
 if __name__ == '__main__':
