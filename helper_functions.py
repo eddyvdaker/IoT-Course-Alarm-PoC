@@ -87,7 +87,7 @@ def get_logs(device_type):
     log.sort(key=lambda x: x[1], reverse=True)
     new_log = []
     for row in log:
-        new_log.append([row[2], row[1]])
+        new_log.append([row[2], time.ctime(int(row[1]))])
     return new_log
 
 
