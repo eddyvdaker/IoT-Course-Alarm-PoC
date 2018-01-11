@@ -1,4 +1,4 @@
-from helper_functions import read_status_file, write_sql
+from helper_functions import *
 import time
 import RPi.GPIO as GPIO
 import urllib.request
@@ -83,3 +83,6 @@ def start_button_checking():
 
 def get_lights_number():
     return len(lights_buttons)
+
+
+read_status_file('ip_addr.txt')
