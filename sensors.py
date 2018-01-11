@@ -7,22 +7,25 @@ import threading
 GPIO.setmode(GPIO.BCM)
 
 # Lights button
-GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Lights led
+GPIO.setup(17, GPIO.OUT)
+
+# Setup alarm led
 GPIO.setup(18, GPIO.OUT)
 
 # Door buttons
-GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 # Check if and which door button is pressed (door opened)
 def check_doors():
     previous_state = [True, True, True]
     while True:
-        input_states = [GPIO.input(24), GPIO.input(23), GPIO.input(22)]
+        input_states = [GPIO.input(22), GPIO.input(23), GPIO.input(24)]
         for i, state in enumerate(input_states):
             if state == False:
                 if previous_state[i] == True:
@@ -39,7 +42,7 @@ def check_doors():
 # Check if the lights button is being pressed
 def check_lights():
     while True:
-        if GPIO.input(17) == False:
+        if GPIO.input(3) == False:
             ip = read_status_file('ip_addr.txt')
             urllib.request.urlopen(f'http://{ip}:5000/lights_toggle')
             time.sleep(0.2)
