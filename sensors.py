@@ -1,4 +1,4 @@
-from helper_functions import *
+from helper_functions import read_status_file, write_sql
 import time
 import RPi.GPIO as GPIO
 import urllib.request
@@ -6,27 +6,40 @@ import threading
 
 GPIO.setmode(GPIO.BCM)
 
-# Lights button
-GPIO.setup(3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# Lights buttons
+lb1 = 4
+lb2 = 14
+lights_buttons = [lb1, lb2]
+GPIO.setup(lb1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(lb2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Lights led
-GPIO.setup(17, GPIO.OUT)
+ll1 = 17
+ll2 = 18
+lights_leds = [ll1, ll2]
+GPIO.setup(ll1, GPIO.OUT)
+GPIO.setup(ll2, GPIO.OUT)
 
 # Setup alarm led
-GPIO.setup(18, GPIO.OUT)
+al1 = 3
+alarm_leds = [al1]
+GPIO.setup(al1, GPIO.OUT)
 
 # Door buttons
-GPIO.setup(22, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+db1 = 22
+db2 = 23
+db3 = 24
+door_buttons = [db1, db2, db3]
+GPIO.setup(db1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(db2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(db3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 # Check if and which door button is pressed (door opened)
 def check_doors():
     previous_state = [True, True, True]
     while True:
-        input_states = [GPIO.input(22), GPIO.input(23), GPIO.input(24)]
-        for i, state in enumerate(input_states):
+        for i, state in enumerate(door_buttons):
             if state == False:
                 if previous_state[i] == True:
                     if read_status_file('alarm_status.txt') == 'True':
@@ -42,24 +55,31 @@ def check_doors():
 # Check if the lights button is being pressed
 def check_lights():
     while True:
-        if GPIO.input(3) == False:
-            ip = read_status_file('ip_addr.txt')
-            urllib.request.urlopen(f'http://{ip}:5000/lights_toggle')
-            time.sleep(0.2)
+        for i, state in enumerate(lights_buttons):
+            if state == False:
+                ip = read_status_file('ip_addr.txt')
+                urllib.request.urlopen(f'http://{ip}:5000/lights_toggle?nr={i}')
+                time.sleep(0.2)
 
 
 # If lights status is True turn on lights
 def turn_on_off_lights():
     while True:
-        if read_status_file('lights_status.txt') == 'True':
-            GPIO.output(18, True)
-            time.sleep(0.5)
-        else:
-            GPIO.output(18, False)
-            time.sleep(0.5)
+        status = read_status_file(f'lights_{i}_status.txt')
+        for i, state in enumerate(lights_leds):
+            if status == 'True':
+                GPIO.output(state, True)
+                time.sleep(0.5)
+            else:
+                GPIO.output(state, False)
+                time.sleep(0.5)
 
 
 def start_button_checking():
     threading.Thread(target=check_doors, args=[]).start()
     threading.Thread(target=check_lights, args=[]).start()
     threading.Thread(target=turn_on_off_lights, args=[]).start()
+
+
+def get_lights_number():
+    return len(lights_buttons)

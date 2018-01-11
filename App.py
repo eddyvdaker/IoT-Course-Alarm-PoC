@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def homepage():
-    page_vars = generate_vars(ALARM_STATUS, LIGHTS_STATUS)
+    page_vars = generate_vars(ALARM_STATUS)
     return render_template('homepage.html', page_vars=page_vars)
 
 
@@ -31,9 +31,10 @@ def get_camera_data():
 
 @app.route('/lights_toggle', methods=['GET'])
 def set_lights_status():
-    global LIGHTS_STATUS
-    LIGHTS_STATUS = not LIGHTS_STATUS
-    write_status_file('lights_status.txt', LIGHTS_STATUS)
+    lights_nr = request.args.get('nr')
+    new_lights_status = not read_status_file(f'lights_{lights_nr}_status.txt')
+    write_status_file(f'lights_{lights_nr}_status.txt',
+                      new_lights_status)
     return redirect('/')
 
 
@@ -63,6 +64,5 @@ if __name__ == '__main__':
     start_button_checking()
 
     ALARM_STATUS = read_status_file('alarm_status.txt')
-    LIGHTS_STATUS = read_status_file('lights_status.txt')
 
     app.run(host='0.0.0.0')

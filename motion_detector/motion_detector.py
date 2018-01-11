@@ -8,11 +8,10 @@ import imutils
 import datetime
 import time
 import urllib.request
-import subprocess
 
 
 if __name__ == '__main__':
-    server_ip = '10.0.0.58:5000'
+    server_ip = '192.168.55.50:5000'
     camera = 1
     camera_id = f'c{camera}'
     send_to_server = True
@@ -75,7 +74,7 @@ if __name__ == '__main__':
         cv2.imshow('Frame Delta', frame_delta)
 
         if movement_detected:
-            current_time = time.time()
+            current_time = int(time.time())
             file = f'{current_time}.png'
 
             if current_time - previous_send_time > screenshot_timeout:

@@ -9,29 +9,24 @@
     <h1>Alarm System</h1>
     <br>
     <h3>Status</h3>
+    <b>Alarm</b>
+    {{ page_vars['alarm_status'] }}
+    <form action="/alarm_toggle" method="get">
+        <button>On/Off</button>
+    </form>
+    <br>
+    <b>Lights</b>
     <table>
-        <tr>
-            <td><b>Alarm</b></td>
-            <td> </td>
-            <td>: {{ page_vars['alarm_status'] }}</td>
-            <td> </td>
-            <td>
-                <form action="/alarm_toggle" method="get">
-                    <button>On/Off</button>
-                </form>
-            </td>
-        </tr>
-        <tr>
-            <td><b>Lights</b></td>
-            <td> </td>
-            <td>: {{ page_vars['lights_status'] }}</td>
-            <td> </td>
-            <td>
-                <form action="/lights_toggle" method="get">
-                    <button>On/Off</button>
-                </form>
-            </td>
-        </tr>
+        {% for lights in page_vars['lights_status'] %}
+            <tr>
+                <td>{{ lights }}</td>
+                <td>
+                    <form action="/lights_toggle?nr={{ forloop.counter }}" method="get">
+                        <button>On/Off</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
     </table>
     <br>
     <h3>Door Openings</h3>

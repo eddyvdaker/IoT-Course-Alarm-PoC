@@ -2,6 +2,7 @@ import sqlite3
 import os
 import time
 import urllib.request
+from sensors import *
 
 db = 'database.sqlite3'
 
@@ -62,7 +63,11 @@ def truple_to_list(data):
 def read_status_file(file):
     file = os.path.join('./device_status/' + str(file))
     with open(file, 'r') as f:
-        return f.readline()
+        content = f.readline()
+        if content == 'True' or content == 'False':
+            return bool(content)
+        else:
+            return content
 
 
 # Updates status from main app to specified status file
@@ -91,13 +96,18 @@ def get_logs(device_type):
     return new_log
 
 
+def get_lights_log():
+    lights_log = []
+    for i in range(get_lights_number()):
+        lights_log.append(bool_to_on_off(read_status_file('lights_{i}_status.txt')))
+    return lights_log
+
+
 # Gets the data from the database and the status and returns an dictionary
 # to fill the homepage template
-def generate_vars(alarm_status, lights_status):
-    doors_log = get_logs('door')
-    camera_log = get_logs('camera')
+def generate_vars(alarm_status):
     page_vars = {'alarm_status': bool_to_on_off(alarm_status),
-                 'lights_status': bool_to_on_off(lights_status),
-                 'door_log': doors_log,
-                 'camera_log': camera_log}
+                 'lights_status': get_lights_log(),
+                 'door_log': get_logs('door'),
+                 'camera_log': get_logs('camera')}
     return page_vars
