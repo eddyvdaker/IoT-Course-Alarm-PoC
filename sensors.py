@@ -85,4 +85,4 @@ def get_lights_number():
     return len(lights_buttons)
 
 
-read_status_file('ip_addr.txt')
+truple_to_list((1,2,3))
